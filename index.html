@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Paw Classifier — AI Cat & Dog Image Classification</title>
+  <meta name="description" content="Paw Classifier is a beautifully crafted AI demo that instantly recognizes cats and dogs using Google Teachable Machine and TensorFlow.js." />
+  <link rel="icon" type="image/png" href="assets/logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+
+  <div id="loader" class="loader" aria-hidden="false">
+    <div class="loader-inner">
+      <img src="assets/logo.png" alt="Paw Classifier" class="loader-logo" />
+      <div class="loader-text">Loading AI Model...</div>
+      <div class="loader-bar"><span id="loader-fill"></span></div>
+      <div class="loader-percent"><span id="loader-percent">0</span>%</div>
+    </div>
+    <div class="loader-glow"></div>
+  </div>
+
+  <div class="bg-decor" aria-hidden="true">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+    <div class="paws"></div>
+  </div>
+
+  <header class="nav">
+    <div class="nav-inner">
+      <a href="#home" class="brand">
+        <img src="assets/logo.png" alt="" class="brand-logo" />
+        <span>Paw Classifier</span>
+      </a>
+      <nav class="nav-links" aria-label="Primary">
+        <a href="#home">Home</a>
+        <a href="#demo">Try Demo</a>
+        <a href="#camera">Camera</a>
+        <a href="#about">About</a>
+        <a href="https://github.com/mkishoredev" target="_blank" rel="noopener">GitHub</a>
+      </nav>
+      <button class="nav-toggle" id="navToggle" aria-label="Menu"><i data-lucide="menu"></i></button>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero and core experience -->
+    <section class="hero" id="home">
+      <div class="hero-left">
+        <span class="badge"><i data-lucide="sparkles"></i> Powered by <a href="https://teachablemachine.withgoogle.com" target="_blank" rel="noopener">Google Teachable Machine</a> &amp; <a href="https://www.tensorflow.org/js" target="_blank" rel="noopener">TensorFlow.js</a></span>
+        <h1>Paw <span class="grad">Classifier</span></h1>
+        <p class="sub">AI-powered Cat &amp; Dog image classification — soft, instant, and delightfully accurate.</p>
+        <div class="hero-cta">
+          <a href="#workspace" class="btn btn-primary"><i data-lucide="upload"></i> Upload Image</a>
+          <a href="#demo" class="btn btn-ghost"><i data-lucide="play"></i> Try Demo</a>
+        </div>
+        <div class="hero-stats">
+          <div><strong>2</strong><span>Classes</span></div>
+          <div><strong>&lt;1s</strong><span>Inference</span></div>
+          <div><strong>100%</strong><span>Client-side</span></div>
+        </div>
+      </div>
+      <div class="hero-right">
+        <div class="hero-card">
+          <div class="ring"></div>
+          <img src="assets/logo.png" alt="Paw Classifier Logo" class="floating" />
+        </div>
+      </div>
+    </section>
+
+    <section class="workspace" id="workspace">
+      <div class="workspace-card">
+        <div class="ws-header">
+          <h2>Workspace</h2>
+          <p>Upload, use your camera, or try a demo — all in one place.</p>
+        </div>
+
+        <div class="ws-grid">
+          <!-- UPLOAD -->
+          <div class="panel upload-panel">
+            <div class="panel-title"><i data-lucide="image-plus"></i> Upload</div>
+            <div class="dropzone" id="dropzone" tabindex="0" role="button" aria-label="Upload image">
+              <input type="file" id="fileInput" accept="image/png,image/jpeg,image/jpg,image/webp" hidden />
+              <div class="dz-inner" id="dzInner">
+                <div class="dz-icon"><i data-lucide="cloud-upload"></i></div>
+                <div class="dz-title">Drag &amp; Drop your image</div>
+                <div class="dz-sub">or <span class="link">click to browse</span> · paste with <kbd>Ctrl</kbd>+<kbd>V</kbd></div>
+                <div class="dz-formats">PNG · JPG · JPEG · WEBP</div>
+              </div>
+              <div class="dz-progress" id="dzProgress" hidden>
+                <div class="dz-status" id="dzStatus">Uploading...</div>
+                <div class="dz-bar"><span id="dzBar"></span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- PREDICTION -->
+          <div class="panel predict-panel">
+            <div class="panel-title"><i data-lucide="brain-circuit"></i> Prediction</div>
+            <div class="preview" id="preview">
+              <div class="preview-empty" id="previewEmpty">
+                <i data-lucide="image"></i>
+                <span>Preview will appear here</span>
+              </div>
+              <img id="previewImg" alt="Preview" hidden />
+            </div>
+
+            <div class="result" id="result" hidden>
+              <div class="result-top">
+                <div class="result-icon" id="resultIcon"><i data-lucide="paw-print"></i></div>
+                <div class="result-main">
+                  <div class="result-label" id="resultLabel">—</div>
+                  <div class="result-meta">
+                    <span id="resultConfidence">0%</span> confidence ·
+                    <span id="resultTime">0ms</span> ·
+                    <span id="resultSource" class="src-tag">upload</span>
+                  </div>
+                </div>
+              </div>
+              <div class="bars" id="bars"></div>
+            </div>
+
+            <div class="result-placeholder" id="resultPlaceholder">
+              <i data-lucide="wand-2"></i>
+              <span>Upload an image, snap a photo, or try a demo to see predictions.</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel demo-panel" id="demo">
+          <div class="panel-title"><i data-lucide="sparkles"></i> Try a Demo</div>
+          <p class="panel-sub">Don't have an image? Test the model instantly using our curated examples.</p>
+          <div class="demo-grid" id="demoGrid"></div>
+        </div>
+
+        <div class="panel camera-panel" id="camera">
+          <div class="panel-title"><i data-lucide="camera"></i> Camera</div>
+          <div class="camera-wrap">
+            <div class="camera-stage" id="camStage">
+              <div class="cam-placeholder" id="camPlaceholder">
+                <i data-lucide="video-off"></i>
+                <span>Camera is off</span>
+                <small>Start your camera to classify in real time.</small>
+              </div>
+              <video id="video" playsinline muted hidden></video>
+              <canvas id="camCanvas" hidden></canvas>
+              <div class="cam-status" id="camStatus" hidden>Connecting...</div>
+            </div>
+            <div class="camera-controls">
+              <button class="btn btn-primary" id="camStart"><i data-lucide="play"></i> Start Camera</button>
+              <button class="btn btn-ghost" id="camStop" disabled><i data-lucide="square"></i> Stop</button>
+              <select id="camSelect" class="select" aria-label="Camera device"></select>
+              <button class="btn btn-ghost" id="camSwitch" disabled><i data-lucide="repeat"></i> Switch</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel history-panel">
+          <div class="panel-title"><i data-lucide="history"></i> Recent Predictions</div>
+          <div class="history-list" id="historyList">
+            <div class="history-empty">No predictions yet. Try an image to get started.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="about" id="about">
+      <div class="about-inner">
+        <h2>About Paw Classifier</h2>
+        <p>Paw Classifier is a lightweight, privacy-first AI demo that classifies images as <strong>cat</strong> or <strong>dog</strong> directly in your browser. It runs on a Google Teachable Machine model powered by TensorFlow.js — no uploads, no servers, just delightful on-device inference.</p>
+        <div class="about-cards">
+          <div class="about-card"><i data-lucide="shield-check"></i><h3>Private</h3><p>Everything runs locally in your browser.</p></div>
+          <div class="about-card"><i data-lucide="zap"></i><h3>Fast</h3><p>Sub-second inference with TensorFlow.js.</p></div>
+          <div class="about-card"><i data-lucide="heart"></i><h3>Crafted</h3><p>Designed with warmth and care.</p></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <img src="assets/logo.png" alt="" />
+        <span>Paw Classifier</span>
+      </div>
+      <div class="footer-mid">
+        Made with <span class="heart">❤</span> by <strong>M Kishore</strong>
+      </div>
+      <div class="footer-right">
+        <a href="https://github.com/mkishoredev" target="_blank" rel="noopener" aria-label="GitHub"><i data-lucide="github"></i></a>
+      </div>
+    </div>
+    <div class="footer-sub">Powered by <a href="https://teachablemachine.withgoogle.com" target="_blank" rel="noopener">Google Teachable Machine</a> &amp; <a href="https://www.tensorflow.org/js" target="_blank" rel="noopener">TensorFlow.js</a></div>
+  </footer>
+
+  <div class="toast-wrap" id="toastWrap" aria-live="polite"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest/dist/teachablemachine-image.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
