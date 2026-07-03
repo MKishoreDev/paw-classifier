@@ -187,7 +187,7 @@ Paw Classifier performs all inference locally.
 
 <div align="center">
   <a href="https://mkishoredev.github.io/paw-classifier/" target="_blank">
-    <img src="https://image.thum.io/get/width/1200/crop/800/https://mkishoredev.github.io/paw-classifier/" alt="Paw Classifier Live Preview" width="100%" style="border-radius: 12px;">
+    <img src="https://image.thum.io/get/width/1200/crop/800/https://mkishoredev.github.io/paw-classifier" alt="Paw Classifier Live Preview" width="100%" style="border-radius: 12px;">
   </a>
   <p><i>Live web preview automatically generated via API</i></p>
 </div>
